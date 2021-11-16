@@ -13,4 +13,15 @@ class DropColumns(BaseEstimator, TransformerMixin):
         # Primeiro realizamos a cópia do dataframe 'X' de entrada
         data = X.copy()
         # Retornamos um novo dataframe sem as colunas indesejadas
-        return data.drop(labels=self.columns, axis='columns')
+        return data.drop(labels=self.columns, axis='columns', errors='ignore')
+
+class EncodeColumns(BaseEstimator, TransformerMixin):
+    def __init__(self, columns):
+        self.columns = columns
+
+    def fit(self, X, y=None):
+        return self
+
+    def transform(self, X):
+        data = X.copy()       
+        return pd.get_dummies(data=data, columns=self.columns)
